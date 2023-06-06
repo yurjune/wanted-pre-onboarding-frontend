@@ -8,22 +8,23 @@ export const Signup = () => {
   const [password, handlePasswordChange] = useInput('');
   const navigate = useNavigate();
 
-  const isValidate = /@+/i.test(email) && password.length >= 8;
+  const isValidated = /@+/i.test(email) && password.length >= 8;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isValidate) {
+
+    if (!isValidated) {
       return;
     }
 
-    try {
-      const res = await services.postSignup({ email, password });
-      if (res.status === 201) {
-        navigate('/signin');
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    services
+      .postSignup({ email, password })
+      .then((res) => {
+        if (res.status === 201) {
+          navigate('/signin');
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -35,7 +36,7 @@ export const Signup = () => {
       handleEmailChange={handleEmailChange}
       password={password}
       handlePasswordChange={handlePasswordChange}
-      isButtonDisabled={!isValidate}
+      isButtonDisabled={!isValidated}
     />
   );
 };
