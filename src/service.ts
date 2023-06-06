@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import {
   PostSignupReqDto,
   PostSignupResDto,
@@ -6,28 +6,31 @@ import {
   PostSigninResDto,
 } from './service.dto';
 
-const axiosConfig: AxiosRequestConfig = {
-  baseURL: `https://www.pre-onboarding-selection-task.shop/`,
-};
-const client = axios.create(axiosConfig);
+axios.defaults.baseURL = 'https://www.pre-onboarding-selection-task.shop/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-type PostHeaderType = {
+const clientWithoutToken = axios.create();
+const requestsWithoutToken = {
+  post: <T, U>(url: string, body: T) =>
+    clientWithoutToken.post<U>(url, body).then((response) => response),
+};
+
+const accessToken = window.localStorage.getItem('access_token') ?? '';
+const client = axios.create({
   headers: {
-    'Content-Type': 'application/json';
-    Authrization?: string;
-  };
-};
-
+    Authorization: `Bearer ${accessToken}`,
+  },
+});
 const requests = {
-  post: <T, U>(url: string, body: T, headers: PostHeaderType) =>
-    client.post<U>(url, body, headers).then((response) => response),
+  get: <T>(url: string) => client.get<T>(url).then((response) => response),
+  post: <T, U>(url: string, body: T) => client.post<U>(url, body).then((response) => response),
 };
 
 const services = {
   postSignup: (body: PostSignupReqDto): Promise<PostSignupResDto> =>
-    requests.post('/auth/signup', body, { headers: { 'Content-Type': 'application/json' } }),
+    requestsWithoutToken.post('/auth/signup', body),
   postSignin: (body: PostSigninReqDto): Promise<PostSigninResDto> =>
-    requests.post('/auth/signin', body, { headers: { 'Content-Type': 'application/json' } }),
+    requestsWithoutToken.post('/auth/signin', body),
 };
 
 export default services;
