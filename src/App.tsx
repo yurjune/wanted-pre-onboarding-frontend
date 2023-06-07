@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Signup, Signin, Todo } from './pages';
-import { createContext, useState } from 'react';
-
-export const TokenContext = createContext((token: string) => {});
+import { useState } from 'react';
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(
@@ -15,15 +13,16 @@ const App = () => {
   };
 
   return (
-    <TokenContext.Provider value={updateToken}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
-          <Route path='signin' element={accessToken ? <Navigate to='/todo' /> : <Signin />} />
-          <Route path='todo' element={accessToken ? <Todo /> : <Navigate to='/signin' />} />
-        </Routes>
-      </BrowserRouter>
-    </TokenContext.Provider>
+    <BrowserRouter>
+      <Routes>
+        <Route path='signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
+        <Route
+          path='signin'
+          element={accessToken ? <Navigate to='/todo' /> : <Signin updateToken={updateToken} />}
+        />
+        <Route path='todo' element={accessToken ? <Todo /> : <Navigate to='/signin' />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
