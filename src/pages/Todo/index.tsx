@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react';
-import { TodoList } from '../../components/TodoList';
+import { TodoList } from '../../components';
 import { useInput } from '../../hooks/useInput';
 import styles from './index.module.scss';
 import type { TodoType } from '../../model';
@@ -57,6 +57,7 @@ export const Todo = () => {
 
   return (
     <div className={styles.container}>
+      <h2>할일 목록</h2>
       <form className={styles.register} onSubmit={createTodo}>
         <input data-testid='new-todo-input' value={value} onChange={handleValueChange} />
         <button data-testid='new-todo-add-button' type='submit'>

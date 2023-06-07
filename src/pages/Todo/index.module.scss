@@ -4,9 +4,18 @@
   align-items: center;
   margin: 0 auto;
   width: 500px;
+  padding: 0 16px 24px;
+  border-radius: 6px;
+  background-color: antiquewhite;
 }
 
 .register {
+  width: 100%;
   display: flex;
   gap: 8px;
+
+  input {
+    padding: 4px;
+    flex: 1;
+  }
 }

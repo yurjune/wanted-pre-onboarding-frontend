@@ -1,4 +1,5 @@
 import { TodoType } from '../../model';
+import styles from './index.module.scss';
 
 interface TodoItemProps {
   item: TodoType;
@@ -8,7 +9,7 @@ export const TodoItem = (props: TodoItemProps) => {
   const { item } = props;
 
   return (
-    <li>
+    <li className={styles.item}>
       <label>
         <input type='checkbox' />
         <span>{item.todo}</span>

@@ -1,0 +1,25 @@
+.item {
+  display: flex;
+  height: 36px;
+  line-height: 36px;
+
+  label {
+    flex: 1;
+    font-size: 1.2rem;
+  }
+
+  input {
+    width: 16px;
+    height: 16px;
+  }
+
+  span {
+    margin-left: 4px;
+  }
+
+  button {
+    height: 80%;
+    align-self: center;
+    margin-left: 8px;
+  }
+}
