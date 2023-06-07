@@ -44,6 +44,10 @@ export const Todo = () => {
   const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (value === '') {
+      return;
+    }
+
     const body = { todo: value };
     services
       .createTodos(body)
