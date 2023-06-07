@@ -6,23 +6,25 @@ import type { TodoType } from '../../model';
 import services from '../../service';
 
 type ActionType =
-  | { type: 'load'; todos: TodoType[] }
-  | { type: 'create'; todo: TodoType }
-  | { type: 'delete'; todo: TodoType }
-  | { type: 'toggle'; todo: TodoType };
+  | { type: 'load'; items: TodoType[] }
+  | { type: 'create'; item: TodoType }
+  | { type: 'update'; item: TodoType }
+  | { type: 'delete'; id: TodoType['id'] };
 
 const todoReducer = (state: TodoType[], action: ActionType) => {
   switch (action.type) {
     case 'load':
-      return action.todos;
+      return action.items;
     case 'create':
-      return state.concat(action.todo);
-    case 'delete':
-      return state.filter((todo) => todo.id !== action.todo.id);
-    case 'toggle':
-      return state.map((todo) =>
-        todo.id === action.todo.id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      return state.concat(action.item);
+    case 'update':
+      return state.map((prev) =>
+        prev.id === action.item.id
+          ? { ...prev, todo: action.item.todo, isCompleted: action.item.isCompleted }
+          : prev
       );
+    case 'delete':
+      return state.filter((prev) => prev.id !== action.id);
   }
 };
 
@@ -35,7 +37,7 @@ export const Todo = () => {
       .getTodos()
       .then((res) => {
         if (res.status === 200) {
-          dispatch({ type: 'load', todos: res.data });
+          dispatch({ type: 'load', items: res.data });
         }
       })
       .catch((err) => console.error(err));
@@ -43,7 +45,6 @@ export const Todo = () => {
 
   const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (value === '') {
       return;
     }
@@ -53,7 +54,32 @@ export const Todo = () => {
       .createTodos(body)
       .then((res) => {
         if (res.status === 201) {
-          dispatch({ type: 'create', todo: res.data });
+          dispatch({ type: 'create', item: res.data });
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const updateTodo = (item: TodoType) => {
+    const { id, todo, isCompleted } = item;
+    const body = { todo, isCompleted };
+
+    services
+      .updateTodos(id, body)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch({ type: 'update', item });
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const deleteTodo = (id: number) => {
+    services
+      .deleteTodos(id)
+      .then((res) => {
+        if (res.status === 204) {
+          dispatch({ type: 'delete', id });
         }
       })
       .catch((err) => console.error(err));
@@ -62,13 +88,13 @@ export const Todo = () => {
   return (
     <div className={styles.container}>
       <h2>할일 목록</h2>
-      <form className={styles.register} onSubmit={createTodo}>
+      <form className={styles.registerForm} onSubmit={createTodo}>
         <input data-testid='new-todo-input' value={value} onChange={handleValueChange} />
         <button data-testid='new-todo-add-button' type='submit'>
           추가
         </button>
       </form>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     </div>
   );
 };
