@@ -16,17 +16,19 @@ axios.defaults.baseURL = 'https://www.pre-onboarding-selection-task.shop/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const clientWithoutToken = axios.create();
+
 const requestsWithoutToken = {
   post: <T, U>(url: string, body: T) =>
     clientWithoutToken.post<U>(url, body).then((response) => response),
 };
 
-const accessToken = window.localStorage.getItem('access_token') ?? '';
-const client = axios.create({
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
+const client = axios.create();
+client.interceptors.request.use((config) => {
+  const accessToken = window.localStorage.getItem('access_token') ?? '';
+  config.headers['Authorization'] = `Bearer ${accessToken}`;
+  return config;
 });
+
 const requests = {
   get: <T>(url: string) => client.get<T>(url).then((response) => response),
   post: <T, U>(url: string, body: T) => client.post<U>(url, body).then((response) => response),
