@@ -1,3 +1,5 @@
+import { TodoType } from './model';
+
 type Status = {
   status: number;
 };
@@ -14,3 +16,24 @@ export type PostSigninResDto = Status & {
     access_token: string;
   };
 };
+
+export type CreateTodosReqDto = {
+  todo: TodoType['todo'];
+};
+export type CreateTodosResDto = Status & {
+  data: TodoType;
+};
+
+export type GetTodosResDto = Status & {
+  data: TodoType[];
+};
+
+export type UpdateTodoReqDto = {
+  todo: TodoType['todo'];
+  isCompleted: TodoType['isCompleted'];
+};
+export type UpdateTodoResDto = Status & {
+  data: TodoType;
+};
+
+export type DeleteTodoResDto = Status;
