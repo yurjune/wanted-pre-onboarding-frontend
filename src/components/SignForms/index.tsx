@@ -34,6 +34,7 @@ export const SignForm = (props: SignFormProps) => {
         type='text'
         value={email}
         onChange={handleEmailChange}
+        placeholder='example@domain.com'
       />
       <label htmlFor='password'>Password:</label>
       <input

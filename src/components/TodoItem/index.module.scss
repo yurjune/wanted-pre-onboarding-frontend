@@ -5,7 +5,7 @@
   line-height: 36px;
 
   label {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
   }
@@ -21,10 +21,14 @@
     margin-left: auto;
     display: flex;
     gap: 8px;
+
+    button {
+      padding: 4px 8px;
+    }
   }
 
   .modifyInput {
     width: 300px;
-    height: 20px;
+    padding: 4px;
   }
 }
