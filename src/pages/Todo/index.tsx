@@ -30,7 +30,7 @@ const todoReducer = (state: TodoType[], action: ActionType) => {
 
 export const Todo = () => {
   const [todos, dispatch] = useReducer(todoReducer, []);
-  const [value, handleValueChange] = useInput('');
+  const [value, handleValueChange, setValue] = useInput('');
 
   useEffect(() => {
     services
@@ -55,6 +55,7 @@ export const Todo = () => {
       .then((res) => {
         if (res.status === 201) {
           dispatch({ type: 'create', item: res.data });
+          setValue('');
         }
       })
       .catch((err) => console.error(err));
