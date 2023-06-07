@@ -1,18 +1,29 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Signup, Signin, Todo } from './pages';
-import { Authenticate } from './components';
+import { createContext, useState } from 'react';
+
+export const TokenContext = createContext((token: string) => {});
 
 const App = () => {
+  const [accessToken, setAccessToken] = useState(
+    () => window.localStorage.getItem('access_token') ?? ''
+  );
+
+  const updateToken = (token: string) => {
+    window.localStorage.setItem('access_token', token);
+    setAccessToken(token);
+  };
+
   return (
-    <BrowserRouter>
-      <Authenticate>
+    <TokenContext.Provider value={updateToken}>
+      <BrowserRouter>
         <Routes>
-          <Route path='signup' element={<Signup />} />
-          <Route path='signin' element={<Signin />} />
-          <Route path='todo' element={<Todo />} />
+          <Route path='signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
+          <Route path='signin' element={accessToken ? <Navigate to='/todo' /> : <Signin />} />
+          <Route path='todo' element={accessToken ? <Todo /> : <Navigate to='/signin' />} />
         </Routes>
-      </Authenticate>
-    </BrowserRouter>
+      </BrowserRouter>
+    </TokenContext.Provider>
   );
 };
 

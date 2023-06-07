@@ -2,10 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { SignForm } from '../../components/index';
 import { useInput } from '../../hooks/useInput';
 import services from '../../service';
+import { useContext } from 'react';
+import { TokenContext } from '../../App';
 
 export const Signin = () => {
   const [email, handleEmailChange] = useInput('');
   const [password, handlePasswordChange] = useInput('');
+  const updateToken = useContext(TokenContext);
   const navigate = useNavigate();
 
   const isValidated = /@+/i.test(email) && password.length >= 8;
@@ -21,7 +24,7 @@ export const Signin = () => {
       .postSignin({ email, password })
       .then((res) => {
         if (res.status === 200) {
-          window.localStorage.setItem('access_token', res.data.access_token);
+          updateToken(res.data.access_token);
           navigate('/todo');
         }
       })
