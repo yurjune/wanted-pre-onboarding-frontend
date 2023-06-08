@@ -25,11 +25,15 @@ export const Signin = ({ updateToken }: SigninProps) => {
       .postSignin({ email, password })
       .then((res) => {
         if (res.status === 200) {
+          alert('로그인에 성공하였습니다.');
           updateToken(res.data.access_token);
           navigate('/todo');
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        alert('요청에 실패하였습니다.');
+        console.error(err);
+      });
   };
 
   return (

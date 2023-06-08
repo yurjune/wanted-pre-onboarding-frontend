@@ -17,6 +17,10 @@ const App = () => {
     <div className={styles.container}>
       <BrowserRouter>
         <Routes>
+          <Route
+            path='/'
+            element={accessToken ? <Navigate to='/todo' /> : <Navigate to='/signup' />}
+          />
           <Route path='/signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
           <Route
             path='/signin'

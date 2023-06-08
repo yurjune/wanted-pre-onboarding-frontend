@@ -21,10 +21,14 @@ export const Signup = () => {
       .postSignup({ email, password })
       .then((res) => {
         if (res.status === 201) {
+          alert('회원가입에 성공하였습니다.');
           navigate('/signin');
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        alert('요청에 실패하였습니다.');
+        console.error(err);
+      });
   };
 
   return (
