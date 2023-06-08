@@ -15,7 +15,7 @@ export const TodoItem = (props: TodoItemProps) => {
   const [checked, setChecked] = useState(item.isCompleted);
   const [value, handleValueChange, setValue] = useInput(item.todo);
 
-  const mergedOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateTodo({ ...item, isCompleted: e.target.checked });
     setChecked(e.target.checked);
   };
@@ -49,11 +49,20 @@ export const TodoItem = (props: TodoItemProps) => {
           className={styles.checkbox}
           type='checkbox'
           checked={checked}
-          onChange={mergedOnchange}
+          onChange={handleCheckboxChange}
         />
-        {isEdit ? null : <span>{value}</span>}
+        {!isEdit ? <span>{value}</span> : null}
       </label>
-      {isEdit ? (
+      {!isEdit ? (
+        <div className={styles.buttonWrapper}>
+          <button data-testid='modify-button' onClick={handleModifyButtonClick}>
+            수정
+          </button>
+          <button data-testid='delete-button' onClick={handleDeleteButtonClick}>
+            삭제
+          </button>
+        </div>
+      ) : (
         <>
           <input
             data-testid='modify-input'
@@ -71,15 +80,6 @@ export const TodoItem = (props: TodoItemProps) => {
             </button>
           </div>
         </>
-      ) : (
-        <div className={styles.buttonWrapper}>
-          <button data-testid='modify-button' onClick={handleModifyButtonClick}>
-            수정
-          </button>
-          <button data-testid='delete-button' onClick={handleDeleteButtonClick}>
-            삭제
-          </button>
-        </div>
       )}
     </li>
   );
