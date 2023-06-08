@@ -17,12 +17,12 @@ const App = () => {
     <div className={styles.container}>
       <BrowserRouter>
         <Routes>
-          <Route path='signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
+          <Route path='/signup' element={accessToken ? <Navigate to='/todo' /> : <Signup />} />
           <Route
-            path='signin'
+            path='/signin'
             element={accessToken ? <Navigate to='/todo' /> : <Signin updateToken={updateToken} />}
           />
-          <Route path='todo' element={accessToken ? <Todo /> : <Navigate to='/signin' />} />
+          <Route path='/todo' element={accessToken ? <Todo /> : <Navigate to='/signin' />} />
         </Routes>
       </BrowserRouter>
     </div>
