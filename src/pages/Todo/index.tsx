@@ -3,28 +3,28 @@ import { TodoList } from '../../components';
 import { useInput } from '../../hooks/useInput';
 import styles from './index.module.scss';
 import type { TodoType } from '../../model';
-import services from '../../service';
+import api from '../../api';
 
 type ActionType =
-  | { type: 'load'; items: TodoType[] }
-  | { type: 'create'; item: TodoType }
-  | { type: 'update'; item: TodoType }
+  | { type: 'load'; todos: TodoType[] }
+  | { type: 'create'; todo: TodoType }
+  | { type: 'update'; todo: TodoType }
   | { type: 'delete'; id: TodoType['id'] };
 
 const todoReducer = (state: TodoType[], action: ActionType) => {
   switch (action.type) {
     case 'load':
-      return action.items;
+      return action.todos;
     case 'create':
-      return state.concat(action.item);
+      return state.concat(action.todo);
     case 'update':
-      return state.map((prev) =>
-        prev.id === action.item.id
-          ? { ...prev, todo: action.item.todo, isCompleted: action.item.isCompleted }
-          : prev
+      return state.map((prevTodo) =>
+        prevTodo.id === action.todo.id
+          ? { ...prevTodo, todo: action.todo.todo, isCompleted: action.todo.isCompleted }
+          : prevTodo
       );
     case 'delete':
-      return state.filter((prev) => prev.id !== action.id);
+      return state.filter((prevTodo) => prevTodo.id !== action.id);
   }
 };
 
@@ -33,11 +33,11 @@ export const Todo = () => {
   const [value, handleValueChange, setValue] = useInput('');
 
   useEffect(() => {
-    services
+    api
       .getTodos()
       .then((res) => {
         if (res.status === 200) {
-          dispatch({ type: 'load', items: res.data });
+          dispatch({ type: 'load', todos: res.data });
         }
       })
       .catch((err) => console.error(err));
@@ -50,11 +50,11 @@ export const Todo = () => {
     }
 
     const body = { todo: value };
-    services
+    api
       .createTodos(body)
       .then((res) => {
         if (res.status === 201) {
-          dispatch({ type: 'create', item: res.data });
+          dispatch({ type: 'create', todo: res.data });
           setValue('');
         }
       })
@@ -65,18 +65,18 @@ export const Todo = () => {
     const { id, todo, isCompleted } = item;
     const body = { todo, isCompleted };
 
-    services
+    api
       .updateTodos(id, body)
       .then((res) => {
         if (res.status === 200) {
-          dispatch({ type: 'update', item });
+          dispatch({ type: 'update', todo: item });
         }
       })
       .catch((err) => console.error(err));
   };
 
   const deleteTodo = (id: number) => {
-    services
+    api
       .deleteTodos(id)
       .then((res) => {
         if (res.status === 204) {

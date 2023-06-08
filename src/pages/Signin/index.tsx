@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { SignForm } from '../../components/index';
+import { AuthForm } from '../../components/index';
 import { useInput } from '../../hooks/useInput';
-import services from '../../service';
+import api from '../../api';
 
 interface SigninProps {
   updateToken: (token: string) => void;
@@ -21,7 +21,7 @@ export const Signin = ({ updateToken }: SigninProps) => {
       return;
     }
 
-    services
+    api
       .postSignin({ email, password })
       .then((res) => {
         if (res.status === 200) {
@@ -33,7 +33,7 @@ export const Signin = ({ updateToken }: SigninProps) => {
   };
 
   return (
-    <SignForm
+    <AuthForm
       testId='signin'
       title='로그인'
       handleSubmit={handleSubmit}

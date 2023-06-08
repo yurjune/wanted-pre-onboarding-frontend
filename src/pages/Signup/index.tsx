@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { SignForm } from '../../components/index';
+import { AuthForm } from '../../components/index';
 import { useInput } from '../../hooks/useInput';
-import services from '../../service';
+import api from '../../api';
 
 export const Signup = () => {
   const [email, handleEmailChange] = useInput('');
@@ -17,7 +17,7 @@ export const Signup = () => {
       return;
     }
 
-    services
+    api
       .postSignup({ email, password })
       .then((res) => {
         if (res.status === 201) {
@@ -28,7 +28,7 @@ export const Signup = () => {
   };
 
   return (
-    <SignForm
+    <AuthForm
       testId='signup'
       title='회원가입'
       handleSubmit={handleSubmit}

@@ -1,3 +1,3 @@
-export * from './SignForms';
+export * from './AuthForm';
 export * from './TodoList';
 export * from './TodoItem';

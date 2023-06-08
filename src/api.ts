@@ -10,13 +10,12 @@ import {
   UpdateTodoReqDto,
   UpdateTodoResDto,
   DeleteTodoResDto,
-} from './service.dto';
+} from './api.dto';
 
 axios.defaults.baseURL = 'https://www.pre-onboarding-selection-task.shop/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const clientWithoutToken = axios.create();
-
 const requestsWithoutToken = {
   post: <T, U>(url: string, body: T) =>
     clientWithoutToken.post<U>(url, body).then((response) => response),
@@ -36,7 +35,7 @@ const requests = {
   delete: <T>(url: string) => client.delete<T>(url).then((response) => response),
 };
 
-const services = {
+const api = {
   postSignup: (body: PostSignupReqDto): Promise<PostSignupResDto> =>
     requestsWithoutToken.post('/auth/signup', body),
   postSignin: (body: PostSigninReqDto): Promise<PostSigninResDto> =>
@@ -50,4 +49,4 @@ const services = {
   deleteTodos: (id: number): Promise<DeleteTodoResDto> => requests.delete(`/todos/${id}`),
 };
 
-export default services;
+export default api;

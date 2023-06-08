@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import styles from './index.module.scss';
 
-interface SignFormProps {
+interface AuthFormProps {
   testId: 'signup' | 'signin';
   title: string;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -12,7 +12,7 @@ interface SignFormProps {
   isButtonDisabled: boolean;
 }
 
-export const SignForm = (props: SignFormProps) => {
+export const AuthForm = (props: AuthFormProps) => {
   const {
     testId,
     title,
