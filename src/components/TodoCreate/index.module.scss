@@ -1,0 +1,13 @@
+.registerForm {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    padding: 4px 8px;
+  }
+}

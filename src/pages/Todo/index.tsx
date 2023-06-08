@@ -1,6 +1,5 @@
 import { useEffect, useReducer } from 'react';
-import { TodoList } from '../../components';
-import { useInput } from '../../hooks/useInput';
+import { TodoCreate, TodoList } from '../../components';
 import styles from './index.module.scss';
 import type { TodoType } from '../../model';
 import api from '../../api';
@@ -30,7 +29,6 @@ const todoReducer = (state: TodoType[], action: ActionType) => {
 
 export const Todo = () => {
   const [todos, dispatch] = useReducer(todoReducer, []);
-  const [value, handleValueChange, setValue] = useInput('');
 
   useEffect(() => {
     api
@@ -43,19 +41,13 @@ export const Todo = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (value === '') {
-      return;
-    }
-
+  const createTodo = (value: string) => {
     const body = { todo: value };
     api
       .createTodos(body)
       .then((res) => {
         if (res.status === 201) {
           dispatch({ type: 'create', todo: res.data });
-          setValue('');
         }
       })
       .catch((err) => console.error(err));
@@ -89,12 +81,7 @@ export const Todo = () => {
   return (
     <div className={styles.container}>
       <h2>할일 목록</h2>
-      <form className={styles.registerForm} onSubmit={createTodo}>
-        <input data-testid='new-todo-input' value={value} onChange={handleValueChange} />
-        <button data-testid='new-todo-add-button' type='submit'>
-          추가
-        </button>
-      </form>
+      <TodoCreate createTodo={createTodo} />
       <TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     </div>
   );
