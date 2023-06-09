@@ -17,9 +17,7 @@ export type PostSigninResDto = Status & {
   };
 };
 
-export type CreateTodosReqDto = {
-  todo: TodoType['todo'];
-};
+export type CreateTodosReqDto = Pick<TodoType, 'todo'>;
 export type CreateTodosResDto = Status & {
   data: TodoType;
 };
@@ -28,10 +26,7 @@ export type GetTodosResDto = Status & {
   data: TodoType[];
 };
 
-export type UpdateTodoReqDto = {
-  todo: TodoType['todo'];
-  isCompleted: TodoType['isCompleted'];
-};
+export type UpdateTodoReqDto = Pick<TodoType, 'todo' | 'isCompleted'>;
 export type UpdateTodoResDto = Status & {
   data: TodoType;
 };
