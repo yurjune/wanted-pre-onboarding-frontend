@@ -5,24 +5,24 @@ import type { TodoType } from '../../model';
 import api from '../../api';
 
 type ActionType =
-  | { type: 'load'; todos: TodoType[] }
-  | { type: 'create'; todo: TodoType }
-  | { type: 'update'; todo: TodoType }
-  | { type: 'delete'; id: TodoType['id'] };
+  | { type: 'LOAD'; todos: TodoType[] }
+  | { type: 'CREATE'; todo: TodoType }
+  | { type: 'UPDATE'; todo: TodoType }
+  | { type: 'DELETE'; id: TodoType['id'] };
 
 const todoReducer = (state: TodoType[], action: ActionType) => {
   switch (action.type) {
-    case 'load':
+    case 'LOAD':
       return action.todos;
-    case 'create':
+    case 'CREATE':
       return state.concat(action.todo);
-    case 'update':
+    case 'UPDATE':
       return state.map((prevTodo) =>
         prevTodo.id === action.todo.id
           ? { ...prevTodo, todo: action.todo.todo, isCompleted: action.todo.isCompleted }
           : prevTodo
       );
-    case 'delete':
+    case 'DELETE':
       return state.filter((prevTodo) => prevTodo.id !== action.id);
   }
 };
@@ -35,7 +35,7 @@ export const Todo = () => {
       .getTodos()
       .then((res) => {
         if (res.status === 200) {
-          dispatch({ type: 'load', todos: res.data });
+          dispatch({ type: 'LOAD', todos: res.data });
         }
       })
       .catch((err) => console.error(err));
@@ -47,7 +47,7 @@ export const Todo = () => {
       .createTodos(body)
       .then((res) => {
         if (res.status === 201) {
-          dispatch({ type: 'create', todo: res.data });
+          dispatch({ type: 'CREATE', todo: res.data });
         }
       })
       .catch((err) => console.error(err));
@@ -61,7 +61,7 @@ export const Todo = () => {
       .updateTodos(id, body)
       .then((res) => {
         if (res.status === 200) {
-          dispatch({ type: 'update', todo: item });
+          dispatch({ type: 'UPDATE', todo: item });
         }
       })
       .catch((err) => console.error(err));
@@ -72,7 +72,7 @@ export const Todo = () => {
       .deleteTodos(id)
       .then((res) => {
         if (res.status === 204) {
-          dispatch({ type: 'delete', id });
+          dispatch({ type: 'DELETE', id });
         }
       })
       .catch((err) => console.error(err));
