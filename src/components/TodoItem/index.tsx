@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEventHandler } from 'react';
 import { TodoType } from '../../model';
 import styles from './index.module.scss';
 import { useInput } from '../../hooks/useInput';
@@ -9,13 +9,12 @@ interface TodoItemProps {
   updateTodo: (item: TodoType) => void;
 }
 
-export const TodoItem = (props: TodoItemProps) => {
-  const { item, deleteTodo, updateTodo } = props;
+export const TodoItem = ({ item, deleteTodo, updateTodo }: TodoItemProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [checked, setChecked] = useState(item.isCompleted);
   const [value, handleValueChange, setValue] = useInput(item.todo);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     updateTodo({ ...item, isCompleted: e.target.checked });
     setChecked(e.target.checked);
   };
@@ -29,12 +28,10 @@ export const TodoItem = (props: TodoItemProps) => {
   };
 
   const handleSubmitButtonClick = () => {
-    if (value === '') {
-      return;
+    if (value !== '') {
+      setIsEdit(false);
+      updateTodo({ ...item, todo: value });
     }
-
-    setIsEdit(false);
-    updateTodo({ ...item, todo: value });
   };
 
   const handleCancelButtonClick = () => {

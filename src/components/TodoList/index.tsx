@@ -8,9 +8,7 @@ interface TodoListProps {
   updateTodo: (item: TodoType) => void;
 }
 
-export const TodoList = (props: TodoListProps) => {
-  const { todos, deleteTodo, updateTodo } = props;
-
+export const TodoList = ({ todos, deleteTodo, updateTodo }: TodoListProps) => {
   return (
     <ul className={styles.container}>
       {todos.map((item) => (

@@ -1,5 +1,6 @@
 import styles from './index.module.scss';
 import { useInput } from '../../hooks/useInput';
+import { FormEventHandler } from 'react';
 
 interface TodoCreateProps {
   createTodo: (value: string) => void;
@@ -8,14 +9,13 @@ interface TodoCreateProps {
 export const TodoCreate = ({ createTodo }: TodoCreateProps) => {
   const [value, handleValueChange, setValue] = useInput('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (value === '') {
-      return;
-    }
 
-    createTodo(value);
-    setValue('');
+    if (value !== '') {
+      createTodo(value);
+      setValue('');
+    }
   };
 
   return (
