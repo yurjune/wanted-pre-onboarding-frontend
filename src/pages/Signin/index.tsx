@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { AuthForm } from '../../components/index';
-import { useInput } from '../../hooks/useInput';
 import api from '../../api';
 
 interface SigninProps {
@@ -8,19 +7,9 @@ interface SigninProps {
 }
 
 export const Signin = ({ updateToken }: SigninProps) => {
-  const [email, handleEmailChange] = useInput('');
-  const [password, handlePasswordChange] = useInput('');
   const navigate = useNavigate();
 
-  const isValidated = /@+/i.test(email) && password.length >= 8;
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!isValidated) {
-      return;
-    }
-
+  const handleSubmit = (email: string, password: string) => {
     api
       .postSignin({ email, password })
       .then((res) => {
@@ -36,16 +25,5 @@ export const Signin = ({ updateToken }: SigninProps) => {
       });
   };
 
-  return (
-    <AuthForm
-      testId='signin'
-      title='로그인'
-      handleSubmit={handleSubmit}
-      email={email}
-      handleEmailChange={handleEmailChange}
-      password={password}
-      handlePasswordChange={handlePasswordChange}
-      isButtonDisabled={!isValidated}
-    />
-  );
+  return <AuthForm testId='signin' title='로그인' onSubmit={handleSubmit} />;
 };

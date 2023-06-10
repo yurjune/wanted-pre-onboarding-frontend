@@ -1,28 +1,26 @@
-import { ChangeEvent } from 'react';
+import { FormEventHandler } from 'react';
 import styles from './index.module.scss';
+import { useInput } from '../../hooks/useInput';
 
 interface AuthFormProps {
   testId: 'signup' | 'signin';
   title: string;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  email: string;
-  handleEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  password: string;
-  handlePasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  isButtonDisabled: boolean;
+  onSubmit: (email: string, pw: string) => void;
 }
 
-export const AuthForm = (props: AuthFormProps) => {
-  const {
-    testId,
-    title,
-    handleSubmit,
-    email,
-    handleEmailChange,
-    password,
-    handlePasswordChange,
-    isButtonDisabled,
-  } = props;
+export const AuthForm = ({ testId, title, onSubmit }: AuthFormProps) => {
+  const [email, handleEmailChange] = useInput('');
+  const [password, handlePasswordChange] = useInput('');
+
+  const isValidated = /@+/i.test(email) && password.length >= 8;
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
+    if (isValidated) {
+      onSubmit(email, password);
+    }
+  };
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
@@ -45,7 +43,7 @@ export const AuthForm = (props: AuthFormProps) => {
         onChange={handlePasswordChange}
       />
       <div className={styles.buttonWrapper}>
-        <button data-testid={`${testId}-button`} type='submit' disabled={isButtonDisabled}>
+        <button data-testid={`${testId}-button`} type='submit' disabled={!isValidated}>
           {title}
         </button>
       </div>

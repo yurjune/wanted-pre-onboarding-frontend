@@ -1,22 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { AuthForm } from '../../components/index';
-import { useInput } from '../../hooks/useInput';
 import api from '../../api';
 
 export const Signup = () => {
-  const [email, handleEmailChange] = useInput('');
-  const [password, handlePasswordChange] = useInput('');
   const navigate = useNavigate();
 
-  const isValidated = /@+/i.test(email) && password.length >= 8;
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!isValidated) {
-      return;
-    }
-
+  const handleSubmit = (email: string, password: string) => {
     api
       .postSignup({ email, password })
       .then((res) => {
@@ -31,16 +20,5 @@ export const Signup = () => {
       });
   };
 
-  return (
-    <AuthForm
-      testId='signup'
-      title='회원가입'
-      handleSubmit={handleSubmit}
-      email={email}
-      handleEmailChange={handleEmailChange}
-      password={password}
-      handlePasswordChange={handlePasswordChange}
-      isButtonDisabled={!isValidated}
-    />
-  );
+  return <AuthForm testId='signup' title='회원가입' onSubmit={handleSubmit} />;
 };
