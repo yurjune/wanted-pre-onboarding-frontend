@@ -1,4 +1,4 @@
-import { TodoType } from '../../model';
+import type { TodoType } from '../../pages';
 import { TodoItem } from '../TodoItem';
 import styles from './index.module.scss';
 

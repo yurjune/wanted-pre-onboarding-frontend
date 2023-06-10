@@ -1,4 +1,4 @@
-import { TodoType } from './model';
+import type { TodoType } from './pages';
 
 type Status = {
   status: number;
@@ -27,8 +27,6 @@ export type GetTodosResDto = Status & {
 };
 
 export type UpdateTodoReqDto = Pick<TodoType, 'todo' | 'isCompleted'>;
-export type UpdateTodoResDto = Status & {
-  data: TodoType;
-};
+export type UpdateTodoResDto = CreateTodosResDto;
 
 export type DeleteTodoResDto = Status;

@@ -1,7 +1,7 @@
 import { useState, ChangeEventHandler } from 'react';
-import { TodoType } from '../../model';
 import styles from './index.module.scss';
 import { useInput } from '../../hooks/useInput';
+import type { TodoType } from '../../pages';
 
 interface TodoItemProps {
   item: TodoType;

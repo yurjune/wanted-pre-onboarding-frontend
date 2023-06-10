@@ -1,8 +1,14 @@
 import { useEffect, useReducer } from 'react';
 import { TodoCreate, TodoList } from '../../components';
 import styles from './index.module.scss';
-import type { TodoType } from '../../model';
 import api from '../../api';
+
+export type TodoType = {
+  id: number;
+  todo: string;
+  isCompleted: boolean;
+  userId: number;
+};
 
 type ActionType =
   | { type: 'LOAD'; todos: TodoType[] }
